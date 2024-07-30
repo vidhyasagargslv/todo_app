@@ -14,7 +14,7 @@ export default function TaskList({ tasks, setTasks, onTaskSelect }) {
   const toggleComplete = async (task) => {
     try {
       const id = getTaskId(task);
-      console.log('Toggling completion for task:', task);
+      
       const response = await fetch('/api/tasks', {
         method: 'PUT',
         headers: {
@@ -45,7 +45,7 @@ export default function TaskList({ tasks, setTasks, onTaskSelect }) {
     const id = getTaskId(selectedTask);
 
     try {
-      console.log('Renaming task:', selectedTask);
+      
       const response = await fetch('/api/tasks', {
         method: 'PUT',
         headers: {
