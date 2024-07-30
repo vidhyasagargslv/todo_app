@@ -1,62 +1,146 @@
+# Task Planner: Organize Your Day
 
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+## Table of Contents
+- [About the Project](#about-the-project)
+- [Live Demo](#live-demo)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Optimizations](#optimizations)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Workflow](#workflow)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## About the Project
+
+Task Planner is a modern, efficient web application designed to help users organize their daily tasks. With a clean, intuitive interface, it allows for easy task creation, management, and tracking. Whether you're a busy professional, a student, or anyone looking to boost productivity, Task Planner is your go-to solution for staying organized.
+
+[Add a screenshot of your app's main interface here]
+
+## Live Demo(deployment)
+
+Experience the Task Planner in action: [Task Planner Demo](https://todo-app-vidhya-sagars-projects.vercel.app/)
+
+## Tech Stack
+
+- **Frontend**: Next.js 13, React
+- **Styling**: Tailwind CSS
+- **Backend**: Next.js API Routes
+- **Database**: MongoDB
+- **Deployment**: Vercel
+
+## Features
+
+- Create, read, update, and delete tasks
+- Mark tasks as complete/incomplete
+- Filter tasks by task name
+- Responsive design for mobile and desktop
+- Dark/Light mode toggle
+- Real-time updates
+- Server-side rendering for improved performance
+
+[Add a collage or series of screenshots showcasing key features]
+
+## Optimizations
+
+Task Planner is built with performance and SEO in mind:
+
+1. **Server-Side Rendering (SSR)**: Utilizes Next.js SSR for faster initial page loads and improved SEO.
+2. **Metadata Optimization**: Implements Next.js built-in metadata API for better search engine visibility.
+3. **Semantic HTML**: Uses semantic elements for improved accessibility and SEO.
+4. **Caching**: Implements Next.js caching mechanisms to reduce server load and improve performance.
+5. **Image Optimization**: Uses Next.js Image component for automatic image optimization.
+6. **Code Splitting**: Leverages Next.js automatic code splitting for faster page loads.
+7. **Responsive Design**: Ensures optimal viewing experience across a wide range of devices.
 
 ## Getting Started
 
-First, run the development server:
+- To get a local copy up and running, follow these simple steps.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Node.js (v14 or later)
+- npm
+  ```sh
+- npm install npm@latest -g
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+**Clone the repo**
+- git clone https://github.com/your_username/task-planner.git
 
-## Learn More
+**Navigate to the project directory**
+- cd task-planner
 
-To learn more about Next.js, take a look at the following resources:
+**Install NPM packages**
+- npm install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Set up your environment variables in a .env.local file**
+- MONGODB_URI=your_mongodb_connection_string
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+**Run the development server**
+- npm run dev
 
-## Deploy on Vercel
+### Usage
+[Add screenshots or GIFs demonstrating how to use the app]
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Adding a Task: Click on the "Add Task" button and enter your task details.
+- Completing a Task: Click the checkbox next to a task to mark it as complete.
+- Editing a Task: Click on a task to open the edit modal, make your changes, and save.
+- Deleting a Task: Click the delete icon next to a task to remove it.
+- Toggling Theme: Use the sun/moon icon in the top right to switch between light and dark modes.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Workflow
+
+**Task Creation:**
+
+- User enters task details in the input field
+- Frontend sends a POST request to the API
+- Backend validates the data and saves it to MongoDB
+- UI updates to show the new task
+
+
+**Task Management:**
+
+- Tasks are fetched from the backend on initial page load (SSR)
+- Users can mark tasks as complete, edit, or delete them
+- Each action triggers an API call (PUT or DELETE)
+- UI updates in real-time to reflect changes
+
+
+**Data Persistence:**
+
+- All tasks are stored in MongoDB, ensuring data is saved across sessions
+
+
+**Responsive Design:**
+
+- The application uses Tailwind CSS for a responsive layout
+- UI adjusts seamlessly between desktop and mobile views
+
+
+**Server-Side Rendering:**
+
+- Initial page load fetches tasks server-side for improved performance and SEO
+- Subsequent actions use client-side rendering for a smooth user experience
 
 
 
+### Contributing
+- Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any 
+- contributions you make are greatly appreciated.
 
+**Fork the Project**
+- Create your Feature Branch (git checkout -b feature/AmazingFeature)
+- Commit your Changes (git commit -m 'Add some AmazingFeature')
+- Push to the Branch (git push origin feature/AmazingFeature)
+- Open a Pull Request
 
-<div className="flex justify-end mr-10 pt-5 max-md:mr-2">
-        <label className="swap swap-rotate">
-          <input type="checkbox" className="theme-controller" value="dark" />
-          <svg
-            className="swap-off h-10 w-10 fill-current max-md:h-8 max-md:w-8"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-          >
-            <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
-          </svg>
-          <svg
-            className="swap-on h-10 w-10 fill-current max-md:h-8 max-md:w-8"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-          >
-            <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
-          </svg>
-        </label>
-      </div>
+### License
+Distributed under the MIT License. See LICENSE for more information.
