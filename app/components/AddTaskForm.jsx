@@ -1,11 +1,15 @@
+// components/AddTaskForm.js
 'use client';
 
 import { useState } from 'react';
 
 export default function AddTaskForm({ onTaskAdded }) {
-  const [newTask, setNewTask] = useState('');
+  const [title, setTitle] = useState('');
 
-  const addTask = async (title) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!title.trim()) return;
+
     try {
       const response = await fetch('/api/tasks', {
         method: 'POST',
@@ -15,42 +19,26 @@ export default function AddTaskForm({ onTaskAdded }) {
         body: JSON.stringify({ title }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to add task');
-      }
+      if (!response.ok) throw new Error('Failed to add task');
 
-      return await response.json();
+      const newTask = await response.json();
+      onTaskAdded(newTask); // Call the callback function with the new task
+      setTitle('');
     } catch (error) {
       console.error('Error adding task:', error);
-      throw error;
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (newTask.trim()) {
-      try {
-        const addedTask = await addTask(newTask);
-        console.log('Task added successfully:', addedTask);
-        setNewTask('');
-        onTaskAdded(addedTask); // Notify parent component about the new task
-      } catch (error) {
-        console.error('Failed to add task:', error);
-      }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center justify-center flex-row mb-4 gap-5 max-md:flex-col">
+    <form onSubmit={handleSubmit} className="flex justify-center items-center gap-3 mb-4 max-md:mb-2 max-md:flex-col">
       <input
         type="text"
-        value={newTask}
-        onChange={(e) => setNewTask(e.target.value)}
-        className="Add_input min-w-[25%] py-2.5 p-2 rounded-lg text-center align-middle text-lg font-medium capitalize caret-blue-600"
-        placeholder="New task"
-        required
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Enter a new task"
+        className="input input-bordered w-full max-w-xs mr-2"
       />
-      <button type="submit" className="btn btn-primary w-fit">Add this</button>
+      <button type="submit" className="btn btn-primary">Add Task</button>
     </form>
   );
 }

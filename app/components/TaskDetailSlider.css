@@ -1,0 +1,9 @@
+/* TaskDetailSlider.css */
+@media (max-width: 768px) {
+    .max-md\:translate-y-full {
+      transform: translateY(100%);
+    }
+    .max-md\:open\:translate-y-0 {
+      transform: translateY(0);
+    }
+  }

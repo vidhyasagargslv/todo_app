@@ -1,13 +1,9 @@
-import AddTaskForm from "../components/AddTaskForm";
-import SearchBar from "../components/SearchBar";
 import TaskDetailSlider from "../components/TaskDetailSlider";
-import TaskList from "../components/TaskList";
 import { getTasks } from "@/lib/tasks";
-import { Suspense } from 'react';
-
-export default async function Home2({ searchParams }) {
-  const search = searchParams?.search ?? '';
-  const tasks = await getTasks(search);
+import { Suspense } from "react";
+import ClientSideTaskList from "../components/ClientSideTaskList";
+export default async function Home2() {
+  const tasks = await getTasks();
 
   return (
     <>
@@ -31,18 +27,16 @@ export default async function Home2({ searchParams }) {
         </label>
       </div>
       <br />
-      <h1 className="text-5xl text-center  font-[roboto] uppercase pb-3 font-bold max-md:text-3xl">Plan your day, add a task...</h1>
-      <AddTaskForm />
-      <div className="flex flex-col items-center gap-5">
-        <SearchBar initialSearch={search} />
-        <Suspense fallback={<div>Loading tasks...</div>}>
-          <TaskList initialTasks={tasks} search={search}/>
-        </Suspense>
-        <TaskDetailSlider/>
+      <h1 className="text-5xl text-center  font-[roboto] uppercase pb-3 -mt-10 font-bold max-md:text-3xl">
+        Plan your day, add a task...
+      </h1>
 
-        
+      <div className="flex flex-col items-center gap-5">
+        <Suspense fallback={<div>Loading tasks...</div>}>
+          <ClientSideTaskList initialTasks={tasks} />
+        </Suspense>
+        <TaskDetailSlider />
       </div>
     </>
   );
 }
-
