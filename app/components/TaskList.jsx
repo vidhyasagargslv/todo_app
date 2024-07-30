@@ -1,14 +1,17 @@
 'use client';
 
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { Trash2,FolderPen } from 'lucide-react';
 
-export default function TaskList({ initialTasks }) {
+export default function TaskList({ initialTasks,search }) {
   const [tasks, setTasks] = useState(initialTasks);
+
+  
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch('/api/tasks');
+        const response = await fetch(`/api/tasks?search=${encodeURIComponent(search)}`);
         if (!response.ok) throw new Error('Failed to fetch tasks');
         const fetchedTasks = await response.json();
         setTasks(fetchedTasks);
@@ -16,19 +19,13 @@ export default function TaskList({ initialTasks }) {
         console.error('Error fetching tasks:', error);
       }
     };
-
     fetchTasks();
+  }, [search]);
 
-    // Set up an interval to fetch tasks every 5 seconds
-    const intervalId = setInterval(fetchTasks, 5000);
-
-    // Clean up the interval on component unmount
-    return () => clearInterval(intervalId);
-  }, [tasks]); 
-
+  // Function to toggle task completion
   const toggleComplete = async (id) => {
     try {
-      const taskToUpdate = tasks.find(task => task._id === id);
+      const taskToUpdate = tasks.find((task) => task._id === id);
       const response = await fetch('/api/tasks', {
         method: 'PUT',
         headers: {
@@ -44,12 +41,13 @@ export default function TaskList({ initialTasks }) {
       if (!response.ok) throw new Error('Failed to update task');
 
       const updatedTask = await response.json();
-      setTasks(tasks.map(task => task._id === id ? updatedTask : task));
+      setTasks((prevTasks) => prevTasks.map((task) => (task._id === id ? updatedTask : task)));
     } catch (error) {
       console.error('Error toggling task completion:', error);
     }
   };
 
+  // Function to rename a task
   const renameTask = async (id) => {
     const newTitle = prompt('Enter new task title:');
     if (!newTitle) return;
@@ -63,19 +61,20 @@ export default function TaskList({ initialTasks }) {
         body: JSON.stringify({
           id,
           title: newTitle,
-          completed: tasks.find(task => task._id === id).completed,
+          completed: tasks.find((task) => task._id === id).completed,
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to rename task');
+      if (!response.ok) throw new Error('Failed to update task');
 
       const updatedTask = await response.json();
-      setTasks(tasks.map(task => task._id === id ? updatedTask : task));
+      setTasks((prevTasks) => prevTasks.map((task) => (task._id === id ? updatedTask : task)));
     } catch (error) {
       console.error('Error renaming task:', error);
     }
   };
 
+  // Function to delete a task
   const deleteTask = async (id) => {
     if (!confirm('Are you sure you want to delete this task?')) return;
 
@@ -90,33 +89,39 @@ export default function TaskList({ initialTasks }) {
 
       if (!response.ok) throw new Error('Failed to delete task');
 
-      setTasks(tasks.filter(task => task._id !== id));
+      setTasks((prevTasks) => prevTasks.filter((task) => task._id !== id));
     } catch (error) {
       console.error('Error deleting task:', error);
     }
   };
 
   return (
-    <ul>
-      {tasks.map(task => (
-        <li key={task._id} className="flex items-center mb-2">
+    <div className='flex gap-3 flex-col'>
+      {tasks.map((task) => (
+        <div key={task._id} className="task-item flex items-center flex-row gap-3 mb-2 max-md:gap-1.5">
+          <div>
           <input
             type="checkbox"
             checked={task.completed}
             onChange={() => toggleComplete(task._id)}
             className="checkbox mr-2"
           />
-          <span className={`flex-grow ${task.completed ? 'line-through' : ''}`}>
+          </div>
+          <div className='w-44 text-left px-6 btn btn-sm btn-outline max-md:w-28'>
+          <span className={`flex-grow text-base capitalize ${task.completed ? 'line-through' : ''}`}>
             {task.title}
           </span>
-          <button onClick={() => renameTask(task._id)} className="btn btn-sm btn-info mr-2">
-            Rename
+          </div>
+          <div>
+          <button onClick={() => renameTask(task._id)} className="btn btn-sm btn-circle btn-neutral mr-2">
+          <FolderPen size={16} />
           </button>
           <button onClick={() => deleteTask(task._id)} className="btn btn-sm btn-error">
-            Delete
+          <Trash2 size={16}/>
           </button>
-        </li>
+          </div>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }

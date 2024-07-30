@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function AddTaskForm() {
+export default function AddTaskForm({ onTaskAdded }) {
   const [newTask, setNewTask] = useState('');
 
   const addTask = async (title) => {
@@ -30,28 +30,27 @@ export default function AddTaskForm() {
     e.preventDefault();
     if (newTask.trim()) {
       try {
-        await addTask(newTask);
-        console.log('Task added successfully:', newTask);
+        const addedTask = await addTask(newTask);
+        console.log('Task added successfully:', addedTask);
         setNewTask('');
-        // You might want to trigger a re-fetch of tasks here or update the parent component
+        onTaskAdded(addedTask); // Notify parent component about the new task
       } catch (error) {
-        // Handle error (e.g., show an error message to the user)
         console.error('Failed to add task:', error);
       }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center justify-center mb-4 gap-5">
+    <form onSubmit={handleSubmit} className="flex items-center justify-center flex-row mb-4 gap-5 max-md:flex-col">
       <input
         type="text"
         value={newTask}
         onChange={(e) => setNewTask(e.target.value)}
-        className="Add_input w-[25%] py-2.5 p-2 rounded-lg text-center align-middle text-lg font-medium capitalize caret-blue-600"
+        className="Add_input min-w-[25%] py-2.5 p-2 rounded-lg text-center align-middle text-lg font-medium capitalize caret-blue-600"
         placeholder="New task"
         required
       />
-      <button type="submit" className="btn btn-primary">Add</button>
+      <button type="submit" className="btn btn-primary w-fit">Add this</button>
     </form>
   );
 }

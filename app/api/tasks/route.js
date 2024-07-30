@@ -3,6 +3,17 @@ import dbConnect from '@/lib/dbconnect';
 import Task from '@/lib/models/Task';
 
 
+export async function GET() {
+  await dbConnect();
+
+  try {
+    const tasks = await Task.find().sort({ createdAt: -1 });
+    return NextResponse.json(tasks);
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to fetch tasks' }, { status: 500 });
+  }
+}
+
 export async function POST(request) {
   await dbConnect();
 

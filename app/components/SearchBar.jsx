@@ -16,18 +16,18 @@ export default function SearchBar({ initialSearch }) {
   }, [searchTerm, router]);
 
   return (
-    <label className="input input-bordered flex items-center gap-2 w-56 border-slate-800">
+    <label className="input border-primary flex items-center gap-2 w-56">
       <input
         type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="grow placeholder-slate-900 " placeholder="Search"
+        className="grow placeholder-inherit font-semibold" placeholder="Search"
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
         fill="currentColor"
-        className="h-4 w-4 opacity-70"
+        className="h-4 w-4 "
       >
         <path
           fillRule="evenodd"
