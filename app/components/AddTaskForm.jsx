@@ -38,7 +38,7 @@ export default function AddTaskForm({ onTaskAdded }) {
         placeholder="Enter a new task"
         className="input input-bordered w-full max-w-xs mr-2"
       />
-      <button type="submit" className="btn btn-primary">Add Task</button>
+      <button type="submit" className="btn btn-primary max-md:btn-sm">Add Task</button>
     </form>
   );
 }

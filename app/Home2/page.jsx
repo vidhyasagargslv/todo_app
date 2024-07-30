@@ -2,6 +2,7 @@ import TaskDetailSlider from "../components/TaskDetailSlider";
 import { getTasks } from "@/lib/tasks";
 import { Suspense } from "react";
 import ClientSideTaskList from "../components/ClientSideTaskList";
+export const revalidate = 3600 
 export default async function Home2() {
   const tasks = await getTasks();
 
@@ -27,7 +28,7 @@ export default async function Home2() {
         </label>
       </div>
       <br />
-      <h1 className="text-5xl text-center  font-[roboto] uppercase pb-3 -mt-10 font-bold max-md:text-3xl">
+      <h1 className="text-5xl text-center font-[roboto] uppercase pb-3 -mt-9 font-bold max-md:font-semibold max-md:text-2xl ">
         Plan your day, add a task...
       </h1>
 

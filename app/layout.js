@@ -5,8 +5,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "TodoApp",
-  description: "Build a todo app for the assignment purpose",
+  title: 'Task Planner | Plan Your Day',
+  description: 'Organize your daily tasks efficiently with our task planner. Add, manage, and complete tasks to boost your productivity.',
+  keywords: 'task planner, todo list, productivity, time management',
 };
 
 export default function RootLayout({ children }) {
