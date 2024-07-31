@@ -78,7 +78,14 @@ export async function POST(request) {
   try {
     const task = await Task.findByIdAndUpdate(id, { title, completed, description }, { new: true });
     if (!task) {
-      return NextResponse.json({ error: 'Task not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Task not found' }, { 
+        status: 404,
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
     }
     return NextResponse.json({
       id: task._id.toString(),
@@ -87,6 +94,12 @@ export async function POST(request) {
       description: task.description,
       createdAt: task.createdAt.toISOString(),
       updatedAt: task.updatedAt.toISOString()
+    }, {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
     });
   } catch (error) {
     console.error('Failed to update task:', error);

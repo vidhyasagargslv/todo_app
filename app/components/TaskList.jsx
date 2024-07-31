@@ -12,55 +12,52 @@ export default function TaskList({ tasks, setTasks, onTaskSelect }) {
   const getTaskId = (task) => task.id || task._id;
 
   // Function to toggle task completion
+  const retryWithBackoff = async (fn, maxRetries = 3, baseDelay = 1000) => {
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        return await fn();
+      } catch (error) {
+        if (i === maxRetries - 1) throw error;
+        await new Promise(resolve => setTimeout(resolve, baseDelay * Math.pow(2, i)));
+      }
+    }
+  };
+  
   const toggleComplete = async (task) => {
     const id = getTaskId(task);
-    if (isUpdating[id]) return; // Prevent multiple updates
-
+    if (isUpdating[id]) return;
+  
     setIsUpdating(prev => ({ ...prev, [id]: true }));
     const newCompletedState = !task.completed;
-
-    // Optimistically update UI
-    setTasks((prevTasks) =>
-      prevTasks.map((t) =>
-        getTaskId(t) === id ? { ...t, completed: newCompletedState } : t
-      )
-    );
-
+  
     try {
-      const response = await fetch('/api/tasks', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: id,
-          completed: newCompletedState,
-          title: task.title,
-        }),
+      const updatedTask = await retryWithBackoff(async () => {
+        const response = await fetch('/api/tasks', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: id,
+            completed: newCompletedState,
+            title: task.title,
+            description: task.description
+          }),
+        });
+  
+        if (!response.ok) throw new Error(await response.text());
+        return response.json();
       });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to update task: ${errorText}`);
-      }
-
-      const updatedTask = await response.json();
-      
-      // Update the task with the response from the server
-      setTasks((prevTasks) =>
-        prevTasks.map((t) =>
-          getTaskId(t) === id ? { ...t, completed: updatedTask.completed } : t
-        )
+  
+      console.log(`Server responded with task update: ${id}, completed=${updatedTask.completed}`);
+  
+      setTasks(prevTasks =>
+        prevTasks.map(t => getTaskId(t) === id ? { ...updatedTask, id: getTaskId(updatedTask) } : t)
       );
     } catch (error) {
       console.error('Error toggling task completion:', error);
       // Revert the optimistic update
-      setTasks((prevTasks) =>
-        prevTasks.map((t) =>
-          getTaskId(t) === id ? { ...t, completed: task.completed } : t
-        )
+      setTasks(prevTasks =>
+        prevTasks.map(t => getTaskId(t) === id ? { ...t, completed: task.completed } : t)
       );
-      // Optionally, show an error message to the user
     } finally {
       setIsUpdating(prev => ({ ...prev, [id]: false }));
     }
