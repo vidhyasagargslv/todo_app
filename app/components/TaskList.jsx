@@ -2,49 +2,69 @@
 
 import { useState } from 'react';
 import { Trash2, FolderPen } from 'lucide-react';
-//import debounce
-import debounce from 'lodash.debounce';
 
 export default function TaskList({ tasks, setTasks, onTaskSelect }) {
   const [selectedTask, setSelectedTask] = useState(null);
   const [newTitle, setNewTitle] = useState('');
+  const [isUpdating, setIsUpdating] = useState({});
 
   // Helper function to get the correct id
   const getTaskId = (task) => task.id || task._id;
 
-// Function to toggle task completion  
-const toggleComplete = debounce(async (task) => {
-  const id = getTaskId(task);
+  // Function to toggle task completion
+  const toggleComplete = async (task) => {
+    const id = getTaskId(task);
+    if (isUpdating[id]) return; // Prevent multiple updates
 
-  try {
-    const response = await fetch('/api/tasks', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: id,
-        completed: !task.completed,
-        title: task.title,
-      }),
-    });
+    setIsUpdating(prev => ({ ...prev, [id]: true }));
+    const newCompletedState = !task.completed;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Failed to update task: ${errorText}`);
-    }
-
-    const updatedTask = await response.json();
-    // Update the task with the response from the server
+    // Optimistically update UI
     setTasks((prevTasks) =>
       prevTasks.map((t) =>
-        getTaskId(t) === id ? { ...t, completed: updatedTask.completed } : t
+        getTaskId(t) === id ? { ...t, completed: newCompletedState } : t
       )
     );
-  } catch (error) {
-    console.error('Error toggling task completion:', error);
-  }
-}, 300);
+
+    try {
+      const response = await fetch('/api/tasks', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: id,
+          completed: newCompletedState,
+          title: task.title,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to update task: ${errorText}`);
+      }
+
+      const updatedTask = await response.json();
+      
+      // Update the task with the response from the server
+      setTasks((prevTasks) =>
+        prevTasks.map((t) =>
+          getTaskId(t) === id ? { ...t, completed: updatedTask.completed } : t
+        )
+      );
+    } catch (error) {
+      console.error('Error toggling task completion:', error);
+      // Revert the optimistic update
+      setTasks((prevTasks) =>
+        prevTasks.map((t) =>
+          getTaskId(t) === id ? { ...t, completed: task.completed } : t
+        )
+      );
+      // Optionally, show an error message to the user
+    } finally {
+      setIsUpdating(prev => ({ ...prev, [id]: false }));
+    }
+  };
 
   // Function to rename a task
   const renameTask = async () => {
@@ -52,7 +72,6 @@ const toggleComplete = debounce(async (task) => {
     const id = getTaskId(selectedTask);
 
     try {
-      
       const response = await fetch('/api/tasks', {
         method: 'PUT',
         headers: {
@@ -113,6 +132,7 @@ const toggleComplete = debounce(async (task) => {
               type="checkbox"
               checked={task.completed || false}
               onChange={() => toggleComplete(task)}
+              disabled={isUpdating[getTaskId(task)]}
               className="checkbox mr-2 max-md:checkbox-xs"
             />
           </div>
