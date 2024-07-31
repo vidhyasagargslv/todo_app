@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Trash2, FolderPen } from 'lucide-react';
 
 export default function TaskList({ tasks, setTasks, onTaskSelect }) {
@@ -10,6 +10,14 @@ export default function TaskList({ tasks, setTasks, onTaskSelect }) {
 
   // Helper function to get the correct id
   const getTaskId = (task) => task.id || task._id;
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const response = await fetch('/api/tasks');
+      const tasks = await response.json();
+      setTasks(tasks);
+    };
+    fetchTasks();
+  }, []);
 
   // Function to toggle task completion
   const retryWithBackoff = async (fn, maxRetries = 3, baseDelay = 1000) => {
