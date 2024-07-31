@@ -16,13 +16,6 @@ export default function TaskList({ tasks, setTasks, onTaskSelect }) {
 const toggleComplete = debounce(async (task) => {
   const id = getTaskId(task);
 
-  // Optimistically update the UI
-  setTasks((prevTasks) =>
-    prevTasks.map((t) =>
-      getTaskId(t) === id ? { ...t, completed: !task.completed } : t
-    )
-  );
-
   try {
     const response = await fetch('/api/tasks', {
       method: 'PUT',
@@ -50,12 +43,6 @@ const toggleComplete = debounce(async (task) => {
     );
   } catch (error) {
     console.error('Error toggling task completion:', error);
-    // Revert the optimistic update if the request fails
-    setTasks((prevTasks) =>
-      prevTasks.map((t) =>
-        getTaskId(t) === id ? { ...t, completed: task.completed } : t
-      )
-    );
   }
 }, 300);
 
