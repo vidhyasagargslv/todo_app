@@ -2,7 +2,32 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbconnect';
 import Task from '@/lib/models/Task';
 
+/**
+ * Handles GET requests to fetch tasks from the database.
+ *
+ * @param {Request} request - The incoming request object.
+ * @returns {Promise<NextResponse>} - A promise that resolves to a NextResponse object.
+ *
+ * @throws Will throw an error if there's a problem with the database connection or fetching tasks.
+ *
+ * @example
+ * GET /api/tasks?search=example
+ *
+ * Response:
+ * [
+ *   {
+ *     "id": "61a1b0c2d3e4f5g6h7i8j9k0",
+ *     "title": "Example Task",
+ *     "completed": false,
+ *     "description": "This is an example task.",
+ *     "createdAt": "2022-01-01T00:00:00.000Z",
+ *     "updatedAt": "2022-01-01T00:00:00.000Z"
+ *   },
+ *   ...
+ * ]
+ */
 
+// Get enpoint to get the result of the tasks
 export async function GET(request) {
   await dbConnect();
   try {
@@ -14,7 +39,7 @@ export async function GET(request) {
     const tasks = await Task.find(query).sort({ createdAt: -1 });
 
 
-    // Serialize the tasks
+    // Serialized the tasks
     const serializedTasks = tasks.map(task => ({
       id: task._id.toString(),
   title: task.title,
@@ -31,6 +56,7 @@ export async function GET(request) {
   }
 }
 
+// POST endpoint to save the task into database
 export async function POST(request) {
   await dbConnect();
 
@@ -44,6 +70,7 @@ export async function POST(request) {
   }
 }
 
+// Rename endpoint for title, description, completion
   export async function PUT(request) {
   const { id, title, completed, description } = await request.json();
   await dbConnect();
@@ -67,6 +94,7 @@ export async function POST(request) {
   }
 }
 
+//DELETE endpoint to delete the task from database
 export async function DELETE(request) {
   const { id } = await request.json();
   await dbConnect();

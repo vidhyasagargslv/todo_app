@@ -1,4 +1,4 @@
-// components/AddTaskForm.js
+
 'use client';
 
 import { useState } from 'react';
@@ -6,6 +6,7 @@ import { useState } from 'react';
 export default function AddTaskForm({ onTaskAdded }) {
   const [title, setTitle] = useState('');
 
+  // sumit function from frontend to add tasks to database
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;

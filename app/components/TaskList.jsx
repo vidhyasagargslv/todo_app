@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Trash2, FolderPen } from 'lucide-react';
+//import debounce
 import debounce from 'lodash.debounce';
 
 export default function TaskList({ tasks, setTasks, onTaskSelect }) {
@@ -129,7 +130,7 @@ const toggleComplete = debounce(async (task) => {
             />
           </div>
           <div className='w-44 text-left px-6 btn btn-sm btn-outline max-md:w-32'
-               onClick={() => onTaskSelect(task)}>
+          onClick={() => onTaskSelect(task)}>
             <span className={`flex-grow text-base capitalize truncate ${task.completed ? 'line-through' : ''}`}>
               {task.title}
             </span>

@@ -2,7 +2,14 @@ import TaskDetailSlider from "../components/TaskDetailSlider";
 import { getTasks } from "@/lib/tasks";
 import { Suspense } from "react";
 import ClientSideTaskList from "../components/ClientSideTaskList";
+
+// Revalidate every hour to make sure the data is always up-to-date
 export const revalidate = 3600 
+/**
+ * Renders the Home2 page component.
+ * 
+ * @returns {JSX.Element} The rendered Home2 page.
+ */
 export default async function Home2() {
   const tasks = await getTasks();
 

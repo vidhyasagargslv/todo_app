@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 export default function SearchBar({ initialSearch, onSearchChange }) {
   const [searchTerm, setSearchTerm] = useState(initialSearch);
 
+  // Search term should be updated when the initial search changes
   useEffect(() => {
     onSearchChange(searchTerm);
   }, [searchTerm, onSearchChange]);

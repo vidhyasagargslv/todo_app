@@ -21,7 +21,8 @@
 
 Task Planner is a modern, efficient web application designed to help users organize their daily tasks. With a clean, intuitive interface, it allows for easy task creation, management, and tracking. Whether you're a busy professional, a student, or anyone looking to boost productivity, Task Planner is your go-to solution for staying organized.
 
-[Add a screenshot of your app's main interface here]
+![Homepage in light mode](<Screenshot 2024-07-31 120241.jpg>)
+![Homepage in dark mode](<Screenshot 2024-07-31 120029.jpg>)
 
 ## Live Demo(deployment)
 
@@ -45,7 +46,9 @@ Experience the Task Planner in action: [Task Planner Demo](https://todo-app-vidh
 - Real-time updates
 - Server-side rendering for improved performance
 
-[Add a collage or series of screenshots showcasing key features]
+![Rename functionality](<Screenshot 2024-07-31 120320.jpg>)
+![Dark mode preview](SharedScreenshot.jpg)
+![Mobile device dark mode](<Screenshot 2024-07-31 120442.jpg>)  ![Mobile device light mode](<Screenshot 2024-07-31 120407.jpg>)
 
 ## Optimizations
 
@@ -73,22 +76,30 @@ Task Planner is built with performance and SEO in mind:
 ### Installation
 
 **Clone the repo**
+```
 - git clone https://github.com/your_username/task-planner.git
-
+```
 **Navigate to the project directory**
+```
 - cd task-planner
+```
 
 **Install NPM packages**
+```
 - npm install
+```
 
 **Set up your environment variables in a .env.local file**
+```
 - MONGODB_URI=your_mongodb_connection_string
+```
 
 **Run the development server**
+```
 - npm run dev
-
+```
 ### Usage
-[Add screenshots or GIFs demonstrating how to use the app]
+
 
 - Adding a Task: Click on the "Add Task" button and enter your task details.
 - Completing a Task: Click the checkbox next to a task to mark it as complete.
@@ -143,4 +154,4 @@ Task Planner is built with performance and SEO in mind:
 - Open a Pull Request
 
 ### License
-Distributed under the MIT License. See LICENSE for more information.
+- Distributed under the MIT License. See LICENSE for more information.

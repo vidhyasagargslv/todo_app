@@ -10,6 +10,7 @@ export default function TaskDetailSlider({ selectedTask, onClose, onTaskUpdate }
   const [isLoading, setIsLoading] = useState(false);
   const sliderRef = useRef(null);
 
+  // Open the slider when a task is selected and close it when the user clicks outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (sliderRef.current && !sliderRef.current.contains(event.target)) {
@@ -23,13 +24,14 @@ export default function TaskDetailSlider({ selectedTask, onClose, onTaskUpdate }
     };
   }, [sliderRef, onClose]);
 
+  // Update the description when a new task is selected and the slider is open
   useEffect(() => {
     
     setDescription(selectedTask?.description || '');
   }, [selectedTask]);
 
 
-
+  // Update the description when a new task is selected and the slider is open 
   const handleSave = async () => {
     setIsLoading(true);
     try {
