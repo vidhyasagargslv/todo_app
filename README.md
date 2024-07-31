@@ -67,7 +67,7 @@ Task Planner is built with performance and SEO in mind:
 
 - Node.js (v14 or later)
 - npm
-  ```sh
+  
 - npm install npm@latest -g
 
 ### Installation

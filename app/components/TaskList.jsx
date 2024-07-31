@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Trash2, FolderPen } from 'lucide-react';
+import debounce from 'lodash.debounce';
 
 export default function TaskList({ tasks, setTasks, onTaskSelect }) {
   const [selectedTask, setSelectedTask] = useState(null);
@@ -10,34 +11,52 @@ export default function TaskList({ tasks, setTasks, onTaskSelect }) {
   // Helper function to get the correct id
   const getTaskId = (task) => task.id || task._id;
 
-  // Function to toggle task completion
-  const toggleComplete = async (task) => {
-    try {
-      const id = getTaskId(task);
-      
-      const response = await fetch('/api/tasks', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: id,
-          completed: !task.completed,
-          title: task.title,
-        }),
-      });
+// Function to toggle task completion  
+const toggleComplete = debounce(async (task) => {
+  const id = getTaskId(task);
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to update task: ${errorText}`);
-      }
+  // Optimistically update the UI
+  setTasks((prevTasks) =>
+    prevTasks.map((t) =>
+      getTaskId(t) === id ? { ...t, completed: !task.completed } : t
+    )
+  );
 
-      const updatedTask = await response.json();
-      setTasks((prevTasks) => prevTasks.map((t) => (getTaskId(t) === id ? { ...t, completed: updatedTask.completed } : t)));
-    } catch (error) {
-      console.error('Error toggling task completion:', error);
+  try {
+    const response = await fetch('/api/tasks', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: id,
+        completed: !task.completed,
+        title: task.title,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to update task: ${errorText}`);
     }
-  };
+
+    const updatedTask = await response.json();
+    // Update the task with the response from the server
+    setTasks((prevTasks) =>
+      prevTasks.map((t) =>
+        getTaskId(t) === id ? { ...t, completed: updatedTask.completed } : t
+      )
+    );
+  } catch (error) {
+    console.error('Error toggling task completion:', error);
+    // Revert the optimistic update if the request fails
+    setTasks((prevTasks) =>
+      prevTasks.map((t) =>
+        getTaskId(t) === id ? { ...t, completed: task.completed } : t
+      )
+    );
+  }
+}, 300);
 
   // Function to rename a task
   const renameTask = async () => {
